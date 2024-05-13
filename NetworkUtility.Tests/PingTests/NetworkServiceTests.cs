@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using System.Net.NetworkInformation;
 using UnitTestPlayground.Ping;
 
 namespace UnitTestPlayground.Tests.PingTests;
@@ -37,5 +38,43 @@ public class NetworkServiceTests
         // Assert
         //Assert.Equal(expected, result);
         result.Should().Be(expected);
+    }
+
+    [Fact]
+    public void NetworkService_GetPingOptions_ReturnsPingOptions()
+    {
+        // Arrange
+        var expected = new PingOptions()
+        {
+            DontFragment = true,
+            Ttl = 64
+        };
+
+        // Act
+        var result = _pingService.GetPingOptions();
+
+        // Assert
+        result.Should().BeOfType<PingOptions>();
+        result.DontFragment.Should().BeTrue();
+        result.Ttl.Should().Be(64);
+    }
+
+    [Fact]
+    public void NetworkService_MostRecentPings_ReturnsPingOptions()
+    {
+        // Arrange
+        var expected = new PingOptions()
+        {
+            DontFragment = true,
+            Ttl = 64
+        };
+
+        // Act
+        var result = _pingService.MostRecentPings();
+
+        // Assert
+        result.Should().BeOfType<PingOptions[]>(); //型別檢查
+        result.Should().ContainEquivalentOf(expected); //內容檢查
+        result.Should().Contain(x => x.DontFragment == true); //內容檢查
     }
 }
