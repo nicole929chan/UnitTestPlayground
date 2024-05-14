@@ -1,11 +1,22 @@
 ﻿using System.Net.NetworkInformation;
+using UnitTestPlayground.DNS;
 
 namespace UnitTestPlayground.Ping;
 public class NetworkService
 {
+    private readonly IDNS _dns;
+
+    public NetworkService(IDNS dNS)
+    {
+        _dns = dNS;
+    }
     public string SendPing()
     {
-        return "Success: xxx";
+        if (_dns.SendDNS())
+        {
+            return "Success: xxx";
+        }
+        return "Failed";
     }
 
     public int PingTimeout(int a, int b)
